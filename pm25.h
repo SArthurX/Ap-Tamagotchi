@@ -1,9 +1,8 @@
 #ifndef PM25_H
 #define PM25_H
 
-#include "boot.h"
-#include "get.h"
-#include "menu.h"
-#include "show.h"
+#include <Arduino.h>
+#include "ap_get.h"
+#include "ap_display.h"
 
 #endif

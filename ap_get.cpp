@@ -1,4 +1,8 @@
-#include "get.h"
+#include "ap_get.h"
+
+const char* ssid = "YOUR_AP_SSID";
+const char* password = "YOUR_AP_PASS";
+const char* serverName = "https://data.moenv.gov.tw/api/v2/aqx_p_133?language=en&api_key=YOUR_API_KEY&filters=itemengname,EQ,PM2.5|county,EQ,Taipei%20City|monitordate,EQ,2024-06-09%2000:00";
 
 int i = 0;
 
