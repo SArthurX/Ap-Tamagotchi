@@ -42,14 +42,6 @@ void bootloader(){
     display.clearDisplay();
     display.display();
     display.setTextSize(1);
-    display.setTextColor(SSD1306_WHITE);
-    display.setCursor(0, 0);
-    display.println("Loading");
-    display.display();
-    delay(2000);
-    display.clearDisplay();
-    display.display();
-    display.setTextSize(1);
     display.setTextColor(WHITE);
     display.setCursor(0, 0);
     display.println("Loading.");

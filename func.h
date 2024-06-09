@@ -1,6 +1,7 @@
 #ifndef FUNC_H
 #define FUNC_H
 
+#include <Arduino.h> 
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>

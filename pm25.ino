@@ -1,10 +1,4 @@
-#include "func.h"
-#include "boot.h"
-#include "get.h"
-#include "menu.h"
-
-#define dataSize 7
-pm25 data[dataSize];
+#include "pm25.h"
 
 typedef enum {
     BOOT,
@@ -33,28 +27,34 @@ void setup() {
     display.clearDisplay();
 }
 
+airChicken chicken;
+
 void loop() {
+    static const int dataSize = 7;
+    static pm25 data[dataSize];
+    static int selectedIndex = -1; 
+
     switch (currentState) {
         case BOOT:
             currentState = GET;
             Serial.println("Bootloader");
             // bootloader();
-        break;
+            break;
         case GET:
             currentState = MENU;
             Serial.println("GETinfo");
             getData(data, dataSize);
-        break;
+            break;
         case MENU:
-            currentState = SHOW;
             Serial.println("Menu");
-            int selectedIndex = selec(data, dataSize);  
+            selectedIndex = selec(data, dataSize);  
             Serial.print("Selected Index: ");
             Serial.println(selectedIndex);
-        break;
+            currentState = SHOW;
+            break;
         case SHOW:
             currentState = BOOT;
-            showBootScreen();
-        break;
+            chicken.ds();
+            break;
     }
 }
