@@ -19,6 +19,7 @@ void setup() {
         for (;;);
     }
 
+    pinMode(18, INPUT_PULLUP);
     screen.clearDisplay();
 }
 
@@ -41,13 +42,16 @@ void loop() {
             getData(data, dataSize);
             break;
         case MENU:
+            currentState = Frame;
             Serial.println("Menu");
             selectedIndex = apt.selec(data, dataSize);  
+            break;
+        case Frame:
             currentState = SHOW;
+            apt.frame(data, selectedIndex);
             break;
         case SHOW:
-            currentState = BOOT;
-            apt.show();
+            //currentState = BOOT;
             break;
     }
 }
