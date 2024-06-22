@@ -47,7 +47,6 @@ int Tamagotchi::selec(pm25* data, size_t size) {
             if (timePrevious == 0) {  
                 timePrevious = timeCurrent;
             } else if ((timeCurrent - timePrevious) > 1000) { 
-                Serial.println(selectedIndex);
                 return selectedIndex;
             }
         } else {
@@ -62,11 +61,11 @@ int Tamagotchi::selec(pm25* data, size_t size) {
     }
 }
 
-void Tamagotchi::frame(pm25* data, size_t selectedIndex){
-    screen.clearDisplay();
-    screen.setTextSize(1);
-    screen.setTextColor(SSD1306_WHITE);
+// tm upTime(){
     
+// }
+
+void Tamagotchi::frame(pm25* data, size_t selectedIndex){
     int16_t x1, y1;
     uint16_t w, h;
     int16_t cursorX, cursorY;
@@ -88,28 +87,84 @@ void Tamagotchi::frame(pm25* data, size_t selectedIndex){
         screen.drawBitmap(cursorX + w + 4 + (i * 8), cursorY, heartBitmap, 8, 8, SSD1306_WHITE);
     }
 
-    screen.getTextBounds("12:34", 0, 0, &x1, &y1, &w, &h);
+    screen.getTextBounds("00:00", 0, 0, &x1, &y1, &w, &h);
     cursorX = screen.width() - w;
     cursorY = screen.height() - h;
     screen.setCursor(cursorX, cursorY);
-    screen.println("12:34");
+    screen.println(&timeinfo, "%H:%M");
 
 
-    int rectWidth = 120; 
-    int rectHeight = 40;
-    int rectX = (screen.width() - rectWidth) / 2;
-    int rectY = (screen.height() - rectHeight) / 2;
     screen.drawRect(rectX, rectY, rectWidth, rectHeight, SSD1306_WHITE);
+}
 
-    screen.getTextBounds("chick", 0, 0, &x1, &y1, &w, &h);
-    cursorX = rectX + (rectWidth - w) / 2;
-    cursorY = rectY + (rectHeight - h) / 2;
-    screen.setCursor(cursorX, cursorY);
-    screen.println("chick");
+void Tamagotchi::status(pm25* data, size_t selectedIndex) {
+    posX = -39;
+    posY = 10;
+    while(posX<120+39){
+        screen.clearDisplay();
+        frame(data, selectedIndex);
+        if(data[selectedIndex].value.toInt() > 50){
+            screen.drawBitmap(posX, posY, Tamagotch_dn, 39,39, SSD1306_WHITE);
+        } else {
+            screen.drawBitmap(posX, posY, Tamagotch_no, 39,39, SSD1306_WHITE);
+        }
+        if(posX==60-39/2){
+            sleep(5);
+        }
+        posX+=3;
+        screen.display();
+    }
+}
+
+
+void Tamagotchi::adjustDirection() {
+    directionX = random(-100, 110) / 10.0;
+    directionY = random(-10, 11) / 10.0;
+    
+    if (directionX == 0 && directionY == 0) {
+        directionX = 0.1;
+    }
+
+    float magnitude = sqrt(directionX * directionX + directionY * directionY);
+    directionX /= magnitude;
+    directionY /= magnitude;
+
+
+    if (abs(directionX) > abs(directionY)) {
+        currentBitmap = (directionX > 0) ? TamagotchiBitRight : TamagotchiBitLeft;
+    }
+    // else {
+    //     currentBitmap = (directionY > 0) ? TamagotchiBitDown : TamagotchiBitUp;
+    // }
+}
+
+void Tamagotchi::pet(pm25* data, size_t selectedIndex) {
+    screen.clearDisplay();
+
+    posX += speed * directionX;
+    posY += speed * directionY;
+
+    if (posX <= rectX || posX >= rectX + rectWidth - 15) {
+        if (posX <= rectX) {
+            posX = rectX;
+        } else {
+            posX = rectX + rectWidth - 15;
+        }
+        adjustDirection();
+    }
+    if (posY <= rectY || posY >= rectY + rectHeight - 15) {
+        if (posY <= rectY) {
+            posY = rectY;
+        } else {
+            posY = rectY + rectHeight - 15;
+        }
+        adjustDirection();
+    }
+
+    frame(data, selectedIndex);
+    screen.drawBitmap(posX, posY, currentBitmap, 15,15, SSD1306_WHITE);
 
     screen.display();
 }
 
-// String Tamagotchi::getTimeString() {
-//     return "12:34";
-// }
+

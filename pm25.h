@@ -5,4 +5,7 @@
 #include "ap_get.h"
 #include "ap_display.h"
 
+extern const char* ssid;
+extern const char* password;
+
 #endif

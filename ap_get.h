@@ -12,11 +12,7 @@ typedef struct {
     String value;
 } pm25;
 
+extern tm timeinfo;
+
 void getData(pm25* data, size_t size);
-
-extern const char* ssid;
-extern const char* password;
-extern const char* serverName;
-
-
 #endif

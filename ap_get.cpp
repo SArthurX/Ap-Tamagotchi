@@ -2,11 +2,21 @@
 
 const char* ssid = "YOUR_AP_SSID";
 const char* password = "YOUR_AP_PASS";
-const char* serverName = "https://data.moenv.gov.tw/api/v2/aqx_p_133?language=en&api_key=YOUR_API_KEY&filters=itemengname,EQ,PM2.5|county,EQ,Taipei%20City|monitordate,EQ,2024-06-09%2000:00";
+char serverName[256];
+char timeStr[20];
+
 
 int i = 0;
 
 void getData(pm25* data, size_t size) {
+  timeinfo.tm_hour -= 2;
+  if (timeinfo.tm_hour < 0) {
+    timeinfo.tm_hour += 24;
+    timeinfo.tm_mday -= 1;
+  }
+  strftime(timeStr, sizeof(timeStr), "%Y-%m-%d%%20%H:00", &timeinfo);
+  snprintf(serverName, sizeof(serverName), "https://data.moenv.gov.tw/api/v2/aqx_p_133?language=en&api_key=YOUR_API_KEY&filters=itemengname,EQ,PM2.5|county,EQ,Taipei%%20City|monitordate,EQ,%s", timeStr);
+
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     http.begin(serverName);
