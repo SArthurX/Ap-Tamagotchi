@@ -1,7 +1,7 @@
 #include "ap_get.h"
 
 const char* ssid = "YOUR_AP_SSID";
-const char* password = "YOUR_AP_PASS";
+const char* password = "YOUR_AP_PASSWORD";
 char serverName[256];
 char timeStr[20];
 

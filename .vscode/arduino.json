@@ -1,7 +1,4 @@
 {
-    "output": "build",
-    "configuration": "FlashFreq=80,UploadSpeed=921600,DebugLevel=none,EraseFlash=none",
     "board": "esp32:esp32:esp32doit-devkit-v1",
-    "port": "/dev/tty.usbserial-0001",
-    "sketch": "pm25.ino"
+    "port": "/dev/tty.usbserial-0001"
 }
